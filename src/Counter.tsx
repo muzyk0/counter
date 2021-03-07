@@ -5,7 +5,6 @@ import s from './App.module.css';
 export type CounterTableProps = {
     count: CounterValueType
 }
-
 export type CounterButtonsProps = {
     count: CounterValueType
     setCounterNewValue: (value: CounterValueType) => void
@@ -18,8 +17,6 @@ export type ButtonType = {
 }
 
 export const Counter: React.FC<CounterPropsType> = (props) => {
-
-
     return (
         <div className={s.App}>
             <CounterTable count={props.count}/>
@@ -30,6 +27,7 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
         </div>
     )
 }
+
 const CounterTable: React.FC<CounterTableProps> = (props) => {
     const colorCount = props.count > 4 ? s.error : ''
     return (
@@ -38,35 +36,24 @@ const CounterTable: React.FC<CounterTableProps> = (props) => {
         </div>
     )
 }
+
 const CounterBtn: React.FC<CounterButtonsProps> = (props) => {
 
     const countInc = () => {
-        /*if (props.count < 5) {
-            props.setCounterNewValue(props.count + 1)
-        }*/
-        props.setCounterNewValue(props.count)
+        props.setCounterNewValue(props.count + 1)
     }
     const countReset = () => {
-        // props.setCounterNewValue(0)
-        props.slowDecrementCount(props.count)
+        props.setCounterNewValue(0)
+        // props.slowDecrementCount(props.count) // set interval
     }
-    // const incBtn = props.count >= 0 && props.count < 5 ? false : true
-    const incBtn = !(props.count >= 0 && props.count < 5)
-
-    // const resetBtn = props.count > 0 ? false : true
-    const resetBtn = props.count <= 0
-
 
     return (
         <div className={s.buttons}>
-            {/*<button disabled={incBtn} className={`${s.btn} ${s.active}`} onClick={countInc}>inc</button>
-            <button disabled={resetBtn} className={`${s.btn}`} onClick={countReset}>reset</button>*/}
             <Button disabled={props.count > 4} countInc={countInc} title={'inc'}/>
             <Button disabled={props.count === 0} countInc={countReset} title={'reset'}/>
         </div>
     )
 }
-
 
 const Button = (props: ButtonType) => {
     return <button disabled={props.disabled}

@@ -8,17 +8,17 @@ export type CounterPropsType = {
     slowDecrementCount: (value: CounterValueType) => void
 }
 
-function App() {
+export function App() {
     const [count, setCount] = useState<CounterValueType>(0);
 
     const setCounterNewValue = (count: CounterValueType) => {
         // setCount(count)
-        if (count < 5) {
-            setCount(count + 1)
+        if (count <= 5) {
+            setCount(count)
         }
     }
 
-    // TODO
+    // set interval
     const slowDecrementCount = (value: CounterValueType) => {
         const interval = setInterval(() => {
             if (value <= 0) {
@@ -27,7 +27,6 @@ function App() {
             setCount(value--)
         }, 100)
     }
-
 
     return (
         <div>
@@ -39,5 +38,3 @@ function App() {
     );
 }
 
-
-export default App;
