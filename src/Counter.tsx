@@ -8,11 +8,12 @@ export type CounterTableProps = {
 export type CounterButtonsProps = {
     count: CounterValueType
     setCounterNewValue: (value: CounterValueType) => void
-    slowDecrementCount: (value: CounterValueType) => void
+    resetCountValue: (value: CounterValueType) => void
+    slowResetCount: (value: CounterValueType) => void
 }
 export type ButtonType = {
     disabled: boolean
-    countInc: () => void
+    onClickHandler: () => void
     title: string
 }
 
@@ -22,7 +23,8 @@ export const Counter: React.FC<CounterPropsType> = (props) => {
             <CounterTable count={props.count}/>
             <CounterBtn count={props.count}
                         setCounterNewValue={props.setCounterNewValue}
-                        slowDecrementCount={props.slowDecrementCount}
+                        slowResetCount={props.slowResetCount}
+                        resetCountValue={props.resetCountValue}
             />
         </div>
     )
@@ -40,17 +42,17 @@ const CounterTable: React.FC<CounterTableProps> = (props) => {
 const CounterBtn: React.FC<CounterButtonsProps> = (props) => {
 
     const countInc = () => {
-        props.setCounterNewValue(props.count + 1)
+        props.setCounterNewValue(props.count)
     }
     const countReset = () => {
-        props.setCounterNewValue(0)
-        // props.slowDecrementCount(props.count) // set interval
+        // props.resetCountValue(0)
+        props.slowResetCount(props.count) // set interval
     }
 
     return (
         <div className={s.buttons}>
-            <Button disabled={props.count > 4} countInc={countInc} title={'inc'}/>
-            <Button disabled={props.count === 0} countInc={countReset} title={'reset'}/>
+            <Button disabled={props.count === 5} onClickHandler={countInc} title={'inc'}/>
+            <Button disabled={props.count === 0} onClickHandler={countReset} title={'reset'}/>
         </div>
     )
 }
@@ -58,5 +60,5 @@ const CounterBtn: React.FC<CounterButtonsProps> = (props) => {
 const Button = (props: ButtonType) => {
     return <button disabled={props.disabled}
                    className={`${s.btn}`}
-                   onClick={props.countInc}>{props.title}</button>
+                   onClick={props.onClickHandler}>{props.title}</button>
 }
