@@ -4,9 +4,10 @@ import s from './CounterSettings.module.css';
 import {Button} from './Button';
 
 export type CounterTableProps = {
-    settingsCounter: SettingsCounterType
-    onChangeSetMinValue: (value: number, func: string) => void
-    onChangeSetMaxValue: (value: number, func: string) => void
+    setNewSettings: (id: string, value: number) => void
+    settingsCounter: SettingsCounterType[]
+    onChangeSetMinValue: (id: string, value: number) => void
+    onChangeSetMaxValue: (id: string, value: number) => void
 }
 export type ButtonType = {
     disabled: boolean
@@ -19,9 +20,10 @@ export type CounterButtonsProps = {
 }
 
 export type CounterSettingPropsType = {
-    settingsCounter: SettingsCounterType
-    onChangeSetMinValue: (value: number, func: string) => void
-    onChangeSetMaxValue: (value: number, func: string) => void
+    setNewSettings: (id: string, value: number) => void
+    settingsCounter: SettingsCounterType[]
+    onChangeSetMinValue: (id: string, value: number) => void
+    onChangeSetMaxValue: (id: string, value: number) => void
     setNewValue: () => void
     error: string
 }
@@ -31,6 +33,7 @@ export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
     return (
         <div className={s.CounterWrapper}>
             <CounterTable
+                setNewSettings={props.setNewSettings}
                 settingsCounter={props.settingsCounter}
                 onChangeSetMinValue={props.onChangeSetMinValue}
                 onChangeSetMaxValue={props.onChangeSetMaxValue}
@@ -44,20 +47,41 @@ export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
 }
 
 const CounterTable: React.FC<CounterTableProps> = (props) => {
-    // const colorCount = props.count >= 4 ? s.error : ''
 
-    const setMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
+/*    const setMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
         const text = Number(e.currentTarget.value)
-        props.onChangeSetMaxValue(text, MAX_VALUE_COUNT)
+        props.onChangeSetMaxValue()
     }
     const setMinValue = (e: ChangeEvent<HTMLInputElement>) => {
         const text = Number(e.currentTarget.value)
         props.onChangeSetMinValue(text, MIN_VALUE_COUNT)
-    }
+    }*/
+
+    const settingsEl = props.settingsCounter.map(set => {
+
+        // const colorCount = props.count >= 4 ? s.error : ''
+
+
+        const setNewSettings = (e: ChangeEvent<HTMLInputElement>) => {
+            const num = Number(e.currentTarget.value)
+            props.setNewSettings(set.id, num)
+        }
+        return (
+            <div className={s.valueSettingWrapper} key={set.id}>
+                <label>{set.title}</label>
+                <input
+                    type="number"
+                    className={s.input}
+                    value={set.valueCount}
+                    onChange={setNewSettings}
+                />
+            </div>
+        )
+    })
 
     return (
         <div className={s.counter}>
-            <div className={s.valueSettingWrapper}>
+            {/*<div className={s.valueSettingWrapper}>
                 <label>max value:</label>
                 <input
                     type="number"
@@ -74,7 +98,8 @@ const CounterTable: React.FC<CounterTableProps> = (props) => {
                     value={props.settingsCounter.minValueCount}
                     onChange={setMinValue}
                 />
-            </div>
+            </div>*/}
+            {settingsEl}
         </div>
     )
 }
@@ -82,7 +107,6 @@ const CounterTable: React.FC<CounterTableProps> = (props) => {
 const CounterSettingBtn: React.FC<CounterButtonsProps> = (props) => {
 
     const disabledBtn = props.error === 'Incorrect value!'
-
 
     const countSet = () => {
         props.setNewValue()

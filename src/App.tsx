@@ -9,8 +9,9 @@ export const MIN_VALUE_COUNT = 'minValueCount'
 
 export type CounterValueType = number
 export type SettingsCounterType = {
-    maxValueCount: number
-    minValueCount: number
+    id: string
+    title: string
+    valueCount: number
 }
 
 export function App() {
@@ -18,36 +19,44 @@ export function App() {
     const [count, setCount] = useState<CounterValueType>(0);
     const [error, setError] = useState(`enter values and press 'set'`)
 
-    const [settingsCounter, setSettingsCounter] = useState<SettingsCounterType>({
-        [MAX_VALUE_COUNT]: 5,
-        [MIN_VALUE_COUNT]: 0
-    })
+    const [settingsCounter, setSettingsCounter] = useState<SettingsCounterType[]>([
+        {id: 'maxValueCount', title: 'max value', valueCount: 5},
+        {id: 'minValueCount', title: 'min value', valueCount: 0}
+    ])
 
-    const onChangeSetMinValue = (value: number, arg: string) => {
-        if (value < 0) {
-            setError('Incorrect value!')
-            setSettingsCounter({...settingsCounter, [arg]: value})
-        } else if (value <= settingsCounter.minValueCount) {
-            setError('Incorrect value!')
-            setSettingsCounter({...settingsCounter, [arg]: value})
-        } else {
-            setError(`enter values and press 'set'`)
-            setSettingsCounter({...settingsCounter, [arg]: value})
-        }
+    const onChangeSetMinValue = (id: string, value: number) => {
+        const setting = settingsCounter.map(s => ({...s, s: value}))
+        setSettingsCounter([...setting])
     }
-    const onChangeSetMaxValue = (value: number, arg: string) => {
-        if (value < 0) {
-            setError('Incorrect value!')
-        } else if (value <= settingsCounter.maxValueCount) {
-            setError('Incorrect value!')
-        } else {
-            setError(`enter values and press 'set'`)
-        }
-        setSettingsCounter({...settingsCounter, [arg]: value})
+    const onChangeSetMaxValue = (id: string, value: number) => {
+        const setting = settingsCounter.map(s => ({...s, valueCount: value}))
+        setSettingsCounter([...setting])
     }
+
+    const setNewSettings = (id: string, value: number) => {
+//         const setting = settingsCounter.find(s => s.id)
+// debugger
+//         if (setting) {
+//             setting.valueCount = value
+//         }
+        // const setting = settingsCounter.map(s => {
+        //     return {...s, valueCount: value}
+        // })
+        const setting = settingsCounter.map(s => {
+            if (s.id === id) {
+                return {...s, valueCount: value}
+            } else {
+                return {...s}
+            }
+        })
+        return setSettingsCounter([...setting])
+    }
+
     const setNewValue = () => {
-        setError('')
-        setCount(settingsCounter.minValueCount)
+        const newValue = settingsCounter.find(s => s.id === 'minValueCount')
+        if (newValue) {
+            setCount(newValue.valueCount)
+        }
     }
     // useEffect(() => {
     //     const maxValueCount = localStorage.getItem('maxValueCount')
@@ -78,33 +87,35 @@ export function App() {
         localStorage.setItem('countValue', JSON.stringify(count))
     }, [count])*/
 
-    const setCountIncValue = (count: CounterValueType) => {
-        //setCount(count)
-        if (count <= settingsCounter.maxValueCount) {
-            setCount(count + 1)
-        }
+    const setCountIncValue = () => {
+        // const setting = settingsCounter.find(s => s.id === id)
+
+        // if (setting && count <= setting.valueCount) {
+        // }
+        setCount(count + 1)
     }
     const resetCountValue = () => {
-        setCount(settingsCounter.minValueCount)
+        setCount(0)
     }
 
     // set interval
     // not using now
-    const slowResetCount = (count: CounterValueType) => {
-        const interval = setInterval(() => {
-            if (count !== null && count <= settingsCounter.minValueCount) {
-                clearInterval(interval)
-            }
-            if (count) {
-                setCount(count--)
-            }
-        }, 100)
-    }
+    // const slowResetCount = (count: CounterValueType) => {
+    //     const interval = setInterval(() => {
+    //         if (count !== null && count <= settingsCounter.minValueCount) {
+    //             clearInterval(interval)
+    //         }
+    //         if (count) {
+    //             setCount(count--)
+    //         }
+    //     }, 100)
+    // }
 
 
     return (
         <div className={s.App}>
             <CounterSettings
+                setNewSettings={setNewSettings}
                 settingsCounter={settingsCounter}
                 onChangeSetMinValue={onChangeSetMinValue}
                 onChangeSetMaxValue={onChangeSetMaxValue}
@@ -114,9 +125,9 @@ export function App() {
 
             <Counter count={count}
                      error={error}
-                     setCounterNewValue={setCountIncValue}
+                     setCountIncValue={setCountIncValue}
                      resetCountValue={resetCountValue}
-                     slowResetCount={slowResetCount}
+                // slowResetCount={slowResetCount}
                      settingsCounter={settingsCounter}
             />
         </div>
