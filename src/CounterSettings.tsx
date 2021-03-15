@@ -1,10 +1,9 @@
 import React from 'react';
-import {CounterPropsType, CounterValueType, SettingCounterType} from './App';
+import {CounterPropsType, CounterValueType} from './App';
 import s from './App.module.css';
 
 export type CounterTableProps = {
     count: CounterValueType
-    settingsCounter: SettingCounterType
 }
 export type CounterButtonsProps = {
     count: CounterValueType
@@ -12,29 +11,27 @@ export type CounterButtonsProps = {
     resetCountValue: (value: CounterValueType) => void
     slowResetCount: (value: CounterValueType) => void
 }
-
 export type ButtonType = {
     disabled: boolean
     onClickHandler: () => void
     title: string
 }
 
-export const Counter: React.FC<CounterPropsType> = ({settingsCounter, ...props}) => {
+export const CounterSettings: React.FC<CounterPropsType> = (props) => {
     return (
         <div className={s.App}>
-            <CounterTable count={props.count} settingsCounter={settingsCounter}/>
+            <CounterTable count={props.count}/>
             <CounterBtn count={props.count}
                         setCounterNewValue={props.setCounterNewValue}
                         slowResetCount={props.slowResetCount}
                         resetCountValue={props.resetCountValue}
-                        settingsCounter={settingsCounter}
             />
         </div>
     )
 }
 
-const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) => {
-    const colorCount = props.count >= settingsCounter.maxValueCount ? s.error : ''
+const CounterTable: React.FC<CounterTableProps> = (props) => {
+    const colorCount = props.count > 4 ? s.error : ''
     return (
         <div className={s.counter}>
             <h1 className={colorCount}>{props.count}</h1>
@@ -42,7 +39,7 @@ const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) 
     )
 }
 
-const CounterBtn: React.FC<CounterPropsType> = ({settingsCounter, ...props}) => {
+const CounterBtn: React.FC<CounterButtonsProps> = (props) => {
 
     const countInc = () => {
         props.setCounterNewValue(props.count)
@@ -54,16 +51,8 @@ const CounterBtn: React.FC<CounterPropsType> = ({settingsCounter, ...props}) => 
 
     return (
         <div className={s.buttons}>
-            <Button
-                title={'inc'}
-                disabled={props.count === settingsCounter.maxValueCount}
-                onClickHandler={countInc}
-            />
-            <Button
-                title={'reset'}
-                disabled={props.count === settingsCounter.minValueCount}
-                onClickHandler={countReset}
-            />
+            <Button disabled={props.count === 5} onClickHandler={countInc} title={'inc'}/>
+            <Button disabled={props.count === 0} onClickHandler={countReset} title={'reset'}/>
         </div>
     )
 }
