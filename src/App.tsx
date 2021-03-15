@@ -34,7 +34,6 @@ export function App() {
         setCount(count)
     }
 
-
     // set interval
     // using
     const slowResetCount = (value: CounterValueType) => {
