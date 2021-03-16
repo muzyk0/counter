@@ -1,12 +1,12 @@
 import React from 'react';
-import {CounterValueType, SettingsCounterType} from '../App';
+import {CounterValueType, ErrorType, SettingsCounterType} from '../App';
 import s from './Counter.module.css';
 import {Button} from './Button';
 
 export type CounterTableProps = {
     count: CounterValueType
     settingsCounter: SettingsCounterType[]
-    error: string
+    error: ErrorType
 }
 export type CounterButtonsProps = {
     count: CounterValueType
@@ -21,7 +21,7 @@ export type CounterPropsType = {
     setCountIncValue: () => void
     resetCountValue: () => void
     settingsCounter: SettingsCounterType[]
-    error: string
+    error: ErrorType
 }
 
 export const Counter: React.FC<CounterPropsType> = ({settingsCounter, ...props}) => {
@@ -45,11 +45,11 @@ const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) 
     //     colorCount = props.count === props.error ? s.error : ''
     // }
 
-    const colorCount = props.error ? s.error : ''
+    const colorCount = props.error.title ? s.error : ''
     return (
         <div className={s.counter}>
             {/*{props.error ? props.error : <h1 className={colorCount}>{props.count}</h1>}*/}
-            <h1 className={colorCount}>{props.count}</h1>
+            {props.error.title ? <p>{props.error.title}</p> : <h1 className={colorCount}>{props.count}</h1>}
         </div>
     )
 }

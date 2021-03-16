@@ -1,13 +1,11 @@
 import React, {ChangeEvent} from 'react';
-import {MAX_VALUE_COUNT, MIN_VALUE_COUNT, SettingsCounterType} from '../App';
+import {ErrorType, MAX_VALUE_COUNT, MIN_VALUE_COUNT, SettingsCounterType} from '../App';
 import s from './CounterSettings.module.css';
 import {Button} from './Button';
 
 export type CounterTableProps = {
     setNewSettings: (id: string, value: number) => void
     settingsCounter: SettingsCounterType[]
-    onChangeSetMinValue: (id: string, value: number) => void
-    onChangeSetMaxValue: (id: string, value: number) => void
 }
 export type ButtonType = {
     disabled: boolean
@@ -16,16 +14,14 @@ export type ButtonType = {
 }
 export type CounterButtonsProps = {
     setNewValue: () => void
-    error: string
+    error: ErrorType
 }
 
 export type CounterSettingPropsType = {
     setNewSettings: (id: string, value: number) => void
     settingsCounter: SettingsCounterType[]
-    onChangeSetMinValue: (id: string, value: number) => void
-    onChangeSetMaxValue: (id: string, value: number) => void
     setNewValue: () => void
-    error: string
+    error: ErrorType
 }
 
 export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
@@ -35,8 +31,6 @@ export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
             <CounterTable
                 setNewSettings={props.setNewSettings}
                 settingsCounter={props.settingsCounter}
-                onChangeSetMinValue={props.onChangeSetMinValue}
-                onChangeSetMaxValue={props.onChangeSetMaxValue}
             />
             <CounterSettingBtn
                 setNewValue={props.setNewValue}
@@ -106,7 +100,7 @@ const CounterTable: React.FC<CounterTableProps> = (props) => {
 
 const CounterSettingBtn: React.FC<CounterButtonsProps> = (props) => {
 
-    const disabledBtn = props.error === 'Incorrect value!'
+    const disabledBtn = props.error.title === 'Incorrect value!'
 
     const countSet = () => {
         props.setNewValue()
