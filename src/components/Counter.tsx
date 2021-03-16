@@ -5,7 +5,7 @@ import {Button} from './Button';
 
 export type CounterTableProps = {
     count: CounterValueType
-    settingsCounter: SettingsCounterType[]
+    settingsCounter: SettingsCounterType
     error: ErrorType
 }
 export type CounterButtonsProps = {
@@ -13,14 +13,14 @@ export type CounterButtonsProps = {
     setCountIncValue: () => void
     resetCountValue: () => void
     // slowResetCount: (value: CounterValueType) => void
-    settingsCounter: SettingsCounterType[]
+    settingsCounter: SettingsCounterType
 }
 
 export type CounterPropsType = {
     count: CounterValueType
     setCountIncValue: () => void
     resetCountValue: () => void
-    settingsCounter: SettingsCounterType[]
+    settingsCounter: SettingsCounterType
     error: ErrorType
 }
 
@@ -45,11 +45,12 @@ const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) 
     //     colorCount = props.count === props.error ? s.error : ''
     // }
 
-    const colorCount = props.error.title ? s.error : ''
+    const colorCount = props.count >= settingsCounter.maxValueCount.valueCount ? s.error : ''
+    const errorStyle = props.error === 'Incorrect value!' ? s.error : ''
     return (
         <div className={s.counter}>
             {/*{props.error ? props.error : <h1 className={colorCount}>{props.count}</h1>}*/}
-            {props.error.title ? <p>{props.error.title}</p> : <h1 className={colorCount}>{props.count}</h1>}
+            {props.error ? <p className={errorStyle}>{props.error}</p> : <h1 className={colorCount}>{props.count}</h1>}
         </div>
     )
 }
@@ -79,23 +80,20 @@ const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) 
     }
 
     // todo fix @ts-ignore
-    // @ts-ignore
-    const maxButtonDisabled = settingsCounter.find(s => s.id === 'maxValueCount').valueCount
-    // @ts-ignore
-    const minButtonDisabled = settingsCounter.find(s => s.id === 'minValueCount').valueCount
+    // const maxButtonDisabled = settingsCounter.find(s => s.id === 'maxValueCount').valueCount
+    // const minButtonDisabled = settingsCounter.find(s => s.id === 'minValueCount').valueCount
 
-    console.log(maxButtonDisabled);
 
     return (
         <div className={s.buttons}>
             <Button
                 title={'inc'}
-                disabled={props.count >= maxButtonDisabled}
+                disabled={props.count >= settingsCounter.maxValueCount.valueCount}
                 onClickHandler={countInc}
             />
             <Button
                 title={'reset'}
-                disabled={props.count <= minButtonDisabled}
+                disabled={props.count <= settingsCounter.minValueCount.valueCount}
                 onClickHandler={countReset}
             />
         </div>

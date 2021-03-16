@@ -1,36 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Counter} from './components/Counter';
 import {CounterSettings} from './components/CounterSettings';
 import s from './App.module.css';
 
 
-export const MAX_VALUE_COUNT = 'maxValueCount'
-export const MIN_VALUE_COUNT = 'minValueCount'
-
 export type CounterValueType = number
-export type SettingsCounterType = {
-    id: string
+
+export type SettingsType = {
     title: string
     valueCount: number
 }
-export type ErrorType = {
-    error: boolean
-    title: `enter values and press 'set'` | `Incorrect value!` | ``
+export type SettingsCounterType = {
+    maxValueCount: SettingsType
+    minValueCount: SettingsType
 }
+
+export type ErrorType = `enter values and press 'set'` | `Incorrect value!` | ``
 
 export function App() {
 
     const [count, setCount] = useState<CounterValueType>(0);
-    const [error, setError] = useState<ErrorType>({
-            error: true,
-            title: ``
-        }
-    )
+    const [error, setError] = useState<ErrorType>(``)
 
-    const [settingsCounter, setSettingsCounter] = useState<SettingsCounterType[]>([
-        {id: 'maxValueCount', title: 'max value', valueCount: 5},
-        {id: 'minValueCount', title: 'min value', valueCount: 0}
-    ])
+    const [settingsCounter, setSettingsCounter] = useState<SettingsCounterType>({
+        maxValueCount: {title: 'max value', valueCount: 5},
+        minValueCount: {title: 'min value', valueCount: 0}
+    })
 
     // const onChangeSetMinValue = (id: string, value: number) => {
     //     const setting = settingsCounter.map(s => ({...s, s: value}))
@@ -41,33 +36,26 @@ export function App() {
     //     setSettingsCounter([...setting])
     // }
 
-    const setNewSettings = (id: string, value: number) => {
-//         const setting = settingsCounter.find(s => s.id)
-// debugger
-//         if (setting) {
-//             setting.valueCount = value
-//         }
-        // const setting = settingsCounter.map(s => {
-        //     return {...s, valueCount: value}
-        // })
-
-        // const setting = settingsCounter.find(s => s.id === id)
-        //
-        // if (setting) {
-        //     setting.valueCount = value
-        // }
+    const setNewSettings = (id: 'maxValueCount' | 'minValueCount', value: number) => {
+        // const setting = settingsCounter.map(s => (s.id === id) ? {...s, valueCount: value} : {...s})
+        setError(`enter values and press 'set'`)
 
 
-        const setting = settingsCounter.map(s => (s.id === id) ? {...s, valueCount: value} : {...s})
-        return setSettingsCounter([...setting])
+
+        return setSettingsCounter({
+            ...settingsCounter,
+            [id]: {...settingsCounter[id], valueCount: value}
+        })
+
+        // return setSettingsCounter([...setting])
     }
 
 
     const setNewValue = () => {
-        const newValue = settingsCounter.find(s => s.id === 'minValueCount')
+        const newValue = settingsCounter.minValueCount
         if (newValue) {
             setCount(newValue.valueCount)
-            setError({...error, title: ``})
+            setError(``)
         }
     }
     // useEffect(() => {
@@ -131,6 +119,7 @@ export function App() {
                 settingsCounter={settingsCounter}
                 setNewValue={setNewValue}
                 error={error}
+                setError={setError}
             />
 
             <Counter count={count}

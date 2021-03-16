@@ -35,7 +35,10 @@
   width: 50px;
   border: 1px solid aqua;
   border-radius: 5px;
-
+  outline: none;
+}
+.errorInput {
+  border: 2px solid red;
 }
 
 .buttons {
