@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Counter} from './components/Counter';
 import {CounterSettings} from './components/CounterSettings';
 import s from './App.module.css';
@@ -41,7 +41,6 @@ export function App() {
         setError(`enter values and press 'set'`)
 
 
-
         return setSettingsCounter({
             ...settingsCounter,
             [id]: {...settingsCounter[id], valueCount: value}
@@ -58,40 +57,27 @@ export function App() {
             setError(``)
         }
     }
-    // useEffect(() => {
-    //     const maxValueCount = localStorage.getItem('maxValueCount')
-    //     const minValueCount = localStorage.getItem('minValueCount')
-    //     if (maxValueCount && minValueCount) {
-    //         setSettingsCounter(
-    //             {
-    //                 ...settingsCounter,
-    //                 maxValueCount: JSON.parse(maxValueCount),
-    //                 minValueCount: JSON.parse(minValueCount)
-    //             }
-    //         )
-    //     }
-    // },[])
-    // useEffect(() => {
-    //     localStorage.setItem('maxValueCount', JSON.stringify(settingsCounter.maxValueCount))
-    //     localStorage.setItem('minValueCount', JSON.stringify(settingsCounter.minValueCount))
-    // }, [settingsCounter])
 
-    /*useEffect(() => {
-        const countValue = localStorage.getItem('countValue')
-        if (countValue) {
-            let newCount = JSON.parse(countValue)
-            setCount(newCount)
+    useEffect(() => {
+        const maxValueCount = localStorage.getItem('maxValueCount')
+        const minValueCount = localStorage.getItem('minValueCount')
+        if (maxValueCount && minValueCount) {
+            setSettingsCounter(
+                {
+                    ...settingsCounter,
+                    maxValueCount: JSON.parse(maxValueCount),
+                    minValueCount: JSON.parse(minValueCount)
+                }
+            )
         }
     }, [])
     useEffect(() => {
-        localStorage.setItem('countValue', JSON.stringify(count))
-    }, [count])*/
+        localStorage.setItem('maxValueCount', JSON.stringify(settingsCounter.maxValueCount))
+        localStorage.setItem('minValueCount', JSON.stringify(settingsCounter.minValueCount))
+    }, [settingsCounter])
+
 
     const setCountIncValue = () => {
-        // const setting = settingsCounter.find(s => s.id === id)
-
-        // if (setting && count <= setting.valueCount) {
-        // }
         setCount(count + 1)
     }
     const resetCountValue = () => {
@@ -100,16 +86,16 @@ export function App() {
 
     // set interval
     // not using now
-    // const slowResetCount = (count: CounterValueType) => {
-    //     const interval = setInterval(() => {
-    //         if (count !== null && count <= settingsCounter.minValueCount) {
-    //             clearInterval(interval)
-    //         }
-    //         if (count) {
-    //             setCount(count--)
-    //         }
-    //     }, 100)
-    // }
+    const slowResetCount = (count: CounterValueType) => {
+        const interval = setInterval(() => {
+            if (count) {
+                setCount(count--)
+            }
+            if (count+1 <= settingsCounter.minValueCount.valueCount) {
+                clearInterval(interval)
+            }
+        }, 100)
+    }
 
 
     return (
@@ -126,7 +112,7 @@ export function App() {
                      error={error}
                      setCountIncValue={setCountIncValue}
                      resetCountValue={resetCountValue}
-                // slowResetCount={slowResetCount}
+                     slowResetCount={slowResetCount}
                      settingsCounter={settingsCounter}
             />
         </div>

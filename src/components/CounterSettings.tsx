@@ -47,15 +47,6 @@ export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
 
 const CounterTable: React.FC<CounterTableProps> = (props) => {
 
-    /*    const setMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
-            const text = Number(e.currentTarget.value)
-            props.onChangeSetMaxValue()
-        }
-        const setMinValue = (e: ChangeEvent<HTMLInputElement>) => {
-            const text = Number(e.currentTarget.value)
-            props.onChangeSetMinValue(text, MIN_VALUE_COUNT)
-        }*/
-
     if (props.settingsCounter.minValueCount) {
         if (props.settingsCounter.minValueCount.valueCount < 0) {
             props.setError(`Incorrect value!`)
@@ -78,24 +69,6 @@ const CounterTable: React.FC<CounterTableProps> = (props) => {
 
     return (
         <div className={s.counter}>
-            {/*<div className={s.valueSettingWrapper}>
-                <label>max value:</label>
-                <input
-                    type="number"
-                    className={`${s.input}`}
-                    value={props.settingsCounter.maxValueCount}
-                    onChange={setMaxValue}
-                />
-            </div>
-            <div className={s.valueSettingWrapper}>
-                <label>min value:</label>
-                <input
-                    type="number"
-                    className={`${s.input}`}
-                    value={props.settingsCounter.minValueCount}
-                    onChange={setMinValue}
-                />
-            </div>*/}
             <div className={s.valueSettingWrapper}>
                 <label>{props.settingsCounter.maxValueCount.title}</label>
                 <input

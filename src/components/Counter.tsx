@@ -7,19 +7,21 @@ export type CounterTableProps = {
     count: CounterValueType
     settingsCounter: SettingsCounterType
     error: ErrorType
+    slowResetCount: (count: CounterValueType) => void
 }
 export type CounterButtonsProps = {
     count: CounterValueType
     setCountIncValue: () => void
     resetCountValue: () => void
-    // slowResetCount: (value: CounterValueType) => void
     settingsCounter: SettingsCounterType
+    slowResetCount: (count: CounterValueType) => void
 }
 
 export type CounterPropsType = {
     count: CounterValueType
     setCountIncValue: () => void
     resetCountValue: () => void
+    slowResetCount: (count: CounterValueType) => void
     settingsCounter: SettingsCounterType
     error: ErrorType
 }
@@ -27,23 +29,24 @@ export type CounterPropsType = {
 export const Counter: React.FC<CounterPropsType> = ({settingsCounter, ...props}) => {
     return (
         <div className={s.CounterWrapper}>
-            <CounterTable count={props.count} settingsCounter={settingsCounter} error={props.error}/>
+            <CounterTable
+                count={props.count}
+                settingsCounter={settingsCounter}
+                error={props.error}
+                slowResetCount={props.slowResetCount}
+            />
             <CounterBtn count={props.count}
                         setCountIncValue={props.setCountIncValue}
                 // slowResetCount={props.slowResetCount}
                         resetCountValue={props.resetCountValue}
                         settingsCounter={settingsCounter}
+                        slowResetCount={props.slowResetCount}
             />
         </div>
     )
 }
 
 const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) => {
-
-    // let colorCount
-    // if (props.count) {
-    //     colorCount = props.count === props.error ? s.error : ''
-    // }
 
     const colorCount = props.count >= settingsCounter.maxValueCount.valueCount ? s.error : ''
     const errorStyle = props.error === 'Incorrect value!' ? s.error : ''
@@ -57,20 +60,6 @@ const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) 
 
 const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) => {
 
-    // const setting = settingsCounter.find(s => s.id)
-    //
-    // if (setting) {
-    //
-    //     const countInc = () => {
-    //         props.setCountIncValue(setting.id, props.count)
-    //     }
-    //     const countReset = () => {
-    //         props.setCountIncValue(setting.id, props.count)
-    //         //props.slowResetCount(props.count) // set interval
-    //     }
-    //
-    // }
-
     const countInc = () => {
         props.setCountIncValue()
     }
@@ -78,11 +67,9 @@ const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) 
         props.resetCountValue()
         //props.slowResetCount(props.count) // set interval
     }
-
-    // todo fix @ts-ignore
-    // const maxButtonDisabled = settingsCounter.find(s => s.id === 'maxValueCount').valueCount
-    // const minButtonDisabled = settingsCounter.find(s => s.id === 'minValueCount').valueCount
-
+    const slowlyReset = () => {
+        props.slowResetCount(props.count)
+    }
 
     return (
         <div className={s.buttons}>
@@ -95,6 +82,11 @@ const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) 
                 title={'reset'}
                 disabled={props.count <= settingsCounter.minValueCount.valueCount}
                 onClickHandler={countReset}
+            />
+            <Button
+                title={'slowly reset'}
+                disabled={props.count <= settingsCounter.minValueCount.valueCount}
+                onClickHandler={slowlyReset}
             />
         </div>
     )
