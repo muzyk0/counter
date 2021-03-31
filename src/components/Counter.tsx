@@ -1,27 +1,27 @@
 import React from 'react';
-import {CounterValueType, ErrorType, SettingsCounterType} from '../App';
+import {ErrorType, SettingsCounterType} from '../App';
 import s from './Counter.module.css';
 import {Button} from './Button';
 
 export type CounterTableProps = {
-    count: CounterValueType
+    count: number
     settingsCounter: SettingsCounterType
     error: ErrorType
-    slowResetCount: (count: CounterValueType) => void
+    slowResetCount: (count: number) => void
 }
 export type CounterButtonsProps = {
-    count: CounterValueType
+    count: number
     setCountIncValue: () => void
     resetCountValue: () => void
     settingsCounter: SettingsCounterType
-    slowResetCount: (count: CounterValueType) => void
+    slowResetCount: (count: number) => void
 }
 
 export type CounterPropsType = {
-    count: CounterValueType
+    count: number
     setCountIncValue: () => void
     resetCountValue: () => void
-    slowResetCount: (count: CounterValueType) => void
+    slowResetCount: (count: number) => void
     settingsCounter: SettingsCounterType
     error: ErrorType
 }
@@ -37,7 +37,6 @@ export const Counter: React.FC<CounterPropsType> = ({settingsCounter, ...props})
             />
             <CounterBtn count={props.count}
                         setCountIncValue={props.setCountIncValue}
-                // slowResetCount={props.slowResetCount}
                         resetCountValue={props.resetCountValue}
                         settingsCounter={settingsCounter}
                         slowResetCount={props.slowResetCount}
@@ -52,7 +51,6 @@ const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) 
     const errorStyle = props.error === 'Incorrect value!' ? s.error : ''
     return (
         <div className={s.counter}>
-            {/*{props.error ? props.error : <h1 className={colorCount}>{props.count}</h1>}*/}
             {props.error ? <p className={errorStyle}>{props.error}</p> : <h1 className={colorCount}>{props.count}</h1>}
         </div>
     )
@@ -65,7 +63,6 @@ const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) 
     }
     const countReset = () => {
         props.resetCountValue()
-        //props.slowResetCount(props.count) // set interval
     }
     const slowlyReset = () => {
         props.slowResetCount(props.count)

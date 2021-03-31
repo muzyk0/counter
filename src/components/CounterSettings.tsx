@@ -57,11 +57,11 @@ const CounterTable: React.FC<CounterTableProps> = (props) => {
 
 
     const setNewMaxSettings = (e: ChangeEvent<HTMLInputElement>) => {
-        const num = Number(e.currentTarget.value)
+        const num = e.currentTarget.valueAsNumber
         props.setNewSettings('maxValueCount', num)
     }
     const setNewMinSettings = (e: ChangeEvent<HTMLInputElement>) => {
-        const num = Number(e.currentTarget.value)
+        const num = e.currentTarget.valueAsNumber
         props.setNewSettings('minValueCount', num)
     }
 

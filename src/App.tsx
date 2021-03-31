@@ -4,8 +4,6 @@ import {CounterSettings} from './components/CounterSettings';
 import s from './App.module.css';
 
 
-export type CounterValueType = number
-
 export type SettingsType = {
     title: string
     valueCount: number
@@ -19,7 +17,7 @@ export type ErrorType = `enter values and press 'set'` | `Incorrect value!` | ``
 
 export function App() {
 
-    const [count, setCount] = useState<CounterValueType>(0);
+    const [count, setCount] = useState<number>(0);
     const [error, setError] = useState<ErrorType>(``)
 
     const [settingsCounter, setSettingsCounter] = useState<SettingsCounterType>({
@@ -27,26 +25,12 @@ export function App() {
         minValueCount: {title: 'min value', valueCount: 0}
     })
 
-    // const onChangeSetMinValue = (id: string, value: number) => {
-    //     const setting = settingsCounter.map(s => ({...s, s: value}))
-    //     setSettingsCounter([...setting])
-    // }
-    // const onChangeSetMaxValue = (id: string, value: number) => {
-    //     const setting = settingsCounter.map(s => ({...s, valueCount: value}))
-    //     setSettingsCounter([...setting])
-    // }
-
     const setNewSettings = (id: 'maxValueCount' | 'minValueCount', value: number) => {
-        // const setting = settingsCounter.map(s => (s.id === id) ? {...s, valueCount: value} : {...s})
         setError(`enter values and press 'set'`)
-
-
         return setSettingsCounter({
             ...settingsCounter,
             [id]: {...settingsCounter[id], valueCount: value}
         })
-
-        // return setSettingsCounter([...setting])
     }
 
 
@@ -70,7 +54,7 @@ export function App() {
                 }
             )
         }
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {
         localStorage.setItem('maxValueCount', JSON.stringify(settingsCounter.maxValueCount))
         localStorage.setItem('minValueCount', JSON.stringify(settingsCounter.minValueCount))
@@ -81,17 +65,17 @@ export function App() {
         setCount(count + 1)
     }
     const resetCountValue = () => {
-        setCount(0)
+        setCount(settingsCounter.minValueCount.valueCount)
     }
 
     // set interval
     // not using now
-    const slowResetCount = (count: CounterValueType) => {
+    const slowResetCount = (count: number) => {
         const interval = setInterval(() => {
             if (count) {
-                setCount(count--)
+                setCount(--count)
             }
-            if (count+1 <= settingsCounter.minValueCount.valueCount) {
+            if (count <= settingsCounter.minValueCount.valueCount) {
                 clearInterval(interval)
             }
         }, 100)
@@ -107,7 +91,6 @@ export function App() {
                 error={error}
                 setError={setError}
             />
-
             <Counter count={count}
                      error={error}
                      setCountIncValue={setCountIncValue}
