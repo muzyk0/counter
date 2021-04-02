@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Counter} from './components/Counter';
-import {CounterSettings} from './components/CounterSettings';
+import {Counter} from './components/Counter/Counter';
+import {CounterSettings} from './components/SettingsCounter/CounterSettings';
 import s from './App.module.css';
+import {useSelector} from 'react-redux';
+import {AppStateType} from './redux/store';
 
 
 export type SettingsType = {
@@ -13,12 +15,20 @@ export type SettingsCounterType = {
     minValueCount: SettingsType
 }
 
+const InitialState = {
+    count: 0,
+    maxValueCount: {title: 'max value', valueCount: 5},
+    minValueCount: {title: 'min value', valueCount: 0}
+}
+
 export type ErrorType = `enter values and press 'set'` | `Incorrect value!` | ``
 
 export function App() {
 
     const [count, setCount] = useState<number>(0);
     const [error, setError] = useState<ErrorType>(``)
+
+    // const settingsCounter = useSelector<AppStateType, SettingsCounterType>(state => state.settingsCounter)
 
     const [settingsCounter, setSettingsCounter] = useState<SettingsCounterType>({
         maxValueCount: {title: 'max value', valueCount: 5},
@@ -42,23 +52,23 @@ export function App() {
         }
     }
 
-    useEffect(() => {
-        const maxValueCount = localStorage.getItem('maxValueCount')
-        const minValueCount = localStorage.getItem('minValueCount')
-        if (maxValueCount && minValueCount) {
-            setSettingsCounter(
-                {
-                    ...settingsCounter,
-                    maxValueCount: JSON.parse(maxValueCount),
-                    minValueCount: JSON.parse(minValueCount)
-                }
-            )
-        }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
-    useEffect(() => {
-        localStorage.setItem('maxValueCount', JSON.stringify(settingsCounter.maxValueCount))
-        localStorage.setItem('minValueCount', JSON.stringify(settingsCounter.minValueCount))
-    }, [settingsCounter])
+    /*    useEffect(() => {
+            const maxValueCount = localStorage.getItem('maxValueCount')
+            const minValueCount = localStorage.getItem('minValueCount')
+            if (maxValueCount && minValueCount) {
+                setSettingsCounter(
+                    {
+                        ...settingsCounter,
+                        maxValueCount: JSON.parse(maxValueCount),
+                        minValueCount: JSON.parse(minValueCount)
+                    }
+                )
+            }
+        }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        useEffect(() => {
+            localStorage.setItem('maxValueCount', JSON.stringify(settingsCounter.maxValueCount))
+            localStorage.setItem('minValueCount', JSON.stringify(settingsCounter.minValueCount))
+        }, [settingsCounter])*/
 
 
     const setCountIncValue = () => {
@@ -91,12 +101,13 @@ export function App() {
                 error={error}
                 setError={setError}
             />
-            <Counter count={count}
-                     error={error}
-                     setCountIncValue={setCountIncValue}
-                     resetCountValue={resetCountValue}
-                     slowResetCount={slowResetCount}
-                     settingsCounter={settingsCounter}
+            <Counter
+                count={count}
+                error={error}
+                setCountIncValue={setCountIncValue}
+                resetCountValue={resetCountValue}
+                slowResetCount={slowResetCount}
+                settingsCounter={settingsCounter}
             />
         </div>
     );
