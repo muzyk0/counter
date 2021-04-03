@@ -1,5 +1,5 @@
 import React from 'react';
-import {Counter} from './components/Counter/Counter';
+import {Counter,} from './components/Counter/Counter';
 import {CounterSettings} from './components/SettingsCounter/CounterSettings';
 import s from './App.module.css';
 import {useDispatch, useSelector} from 'react-redux';
@@ -37,17 +37,11 @@ export function App() {
 
     return (
         <div className={s.App}>
-            <CounterSettings
-                settingsCounter={settingsCounter}
-                error={settingsCounter.error}
-                setError={setError}
+            <CounterSettings settingsCounter={settingsCounter}
+                             setError={setError}
             />
-            <Counter
-                count={settingsCounter.count}
-                error={settingsCounter.error}
-                settingsCounter={settingsCounter}
-            />
+            <Counter settingsCounter={settingsCounter}/>
         </div>
-    );
+    )
 }
 

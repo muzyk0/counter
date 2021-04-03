@@ -1,47 +1,20 @@
 import React from 'react';
 import s from './Counter.module.css';
 import {Button} from '../Button/Button';
-import {CounterTable} from './CounterTable';
 import {useDispatch} from 'react-redux';
 import {
-    ErrorType,
     setCountDecrementValue,
     setCountIncValue,
     setCountResetValue,
     SettingsCounterType
 } from '../../redux/settings-counter-reducer';
-
-export type CounterButtonsProps = {
-    count: number
-    settingsCounter: SettingsCounterType
-    error: ErrorType
-}
+import {Btn, CounterWrapper, Table} from '../CounterWrapper';
 
 export type CounterPropsType = {
-    count: number
     settingsCounter: SettingsCounterType
-    error: ErrorType
 }
 
-export const Counter: React.FC<CounterPropsType> = ({settingsCounter, ...props}) => {
-    return (
-        <div className={s.CounterWrapper}>
-            <CounterTable
-                count={props.count}
-                settingsCounter={settingsCounter}
-                error={props.error}
-            />
-            <CounterBtn
-                count={props.count}
-                error={props.error}
-                settingsCounter={settingsCounter}
-            />
-        </div>
-    )
-}
-
-const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) => {
-
+export const Counter: React.FC<CounterPropsType> = ({settingsCounter}) => {
     const dispatch = useDispatch()
 
     const countInc = () => {
@@ -54,35 +27,39 @@ const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) 
         dispatch(setCountResetValue())
     }
 
-    const slowResetCount = (count: number) => {
-        const interval = setInterval(() => {
-            if (count) {
-                // setCount(--count)
-            }
-            if (count <= settingsCounter.minValueCount.valueCount) {
-                clearInterval(interval)
-            }
-        }, 100)
-    }
+    const colorCount = settingsCounter.count >= settingsCounter.maxValueCount.valueCount ? s.error : ''
+    const errorStyle = settingsCounter.error === 'Incorrect value!' ? s.error : ''
 
     return (
-        <div className={s.buttons}>
-            <Button
-                title={'inc'}
-                disabled={!!props.error && props.count >= settingsCounter.maxValueCount.valueCount}
-                onClickHandler={countInc}
-            />
-            <Button
-                title={'dec'}
-                disabled={props.count <= settingsCounter.minValueCount.valueCount}
-                onClickHandler={countDecrement}
-            />
-            <Button
-                title={'reset'}
-                disabled={props.count <= settingsCounter.minValueCount.valueCount}
-                onClickHandler={countReset}
-            />
-        </div>
+        /*<div className={s.CounterWrapper}>
+            <CounterTable settingsCounter={settingsCounter}/>
+            <CounterBtn settingsCounter={settingsCounter}/>
+        </div>*/
+        <CounterWrapper>
+            <Table>
+                {settingsCounter.error
+                    ? <p className={errorStyle}>{settingsCounter.error}</p>
+                    : <h1 className={colorCount}>{settingsCounter.count}</h1>
+                }
+            </Table>
+            <Btn>
+                <Button
+                    title={'inc'}
+                    disabled={!!settingsCounter.error || settingsCounter.count >= settingsCounter.maxValueCount.valueCount}
+                    onClickHandler={countInc}
+                />
+                <Button
+                    title={'dec'}
+                    disabled={!!settingsCounter.error || settingsCounter.count <= settingsCounter.minValueCount.valueCount}
+                    onClickHandler={countDecrement}
+                />
+                <Button
+                    title={'reset'}
+                    disabled={!!settingsCounter.error || settingsCounter.count <= settingsCounter.minValueCount.valueCount}
+                    onClickHandler={countReset}
+                />
+            </Btn>
+        </CounterWrapper>
     )
 }
 

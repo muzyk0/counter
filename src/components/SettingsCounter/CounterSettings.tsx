@@ -11,30 +11,29 @@ export type ButtonType = {
     onClickHandler: () => void
     title: string
 }
+export type CounterSettingPropsType = {
+    settingsCounter: SettingsCounterType
+    setError: (value: ErrorType) => void
+}
+
 export type CounterButtonsProps = {
     error: ErrorType
     setError: (value: ErrorType) => void
 }
 
-export type CounterSettingPropsType = {
-    settingsCounter: SettingsCounterType
-    error: ErrorType
-    setError: (value: ErrorType) => void
-}
-
-export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
+export const CounterSettings: React.FC<CounterSettingPropsType> = ({settingsCounter, ...props}) => {
 
 
     return (
         <div className={s.CounterWrapper}>
             <CounterSettingsTable
-                settingsCounter={props.settingsCounter}
+                settingsCounter={settingsCounter}
                 setError={props.setError}
-                error={props.error}
+                error={settingsCounter.error}
             />
             <CounterSettingBtn
                 setError={props.setError}
-                error={props.error}
+                error={settingsCounter.error}
             />
         </div>
     )

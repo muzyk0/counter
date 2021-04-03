@@ -20,42 +20,32 @@ const InitialState = {
 
 export const settingsCounterReducer = (state: SettingsCounterType = InitialState, action: CounterReducerActionType): SettingsCounterType => {
     switch (action.type) {
-        case 'SET-NEW-SETTINGS': {
+        case 'SET-NEW-SETTINGS':
             return {
                 ...state,
                 [action.id]: {...state[action.id], valueCount: action.valueCount},
             }
-        }
-        case 'COUNT-INC-VALUE': {
+        case 'COUNT-INC-VALUE':
             return {
                 ...state,
-                count: state.count+1
+                count: state.count + 1
             }
-        }
-        case 'COUNT-DECREMENT-VALUE': {
+        case 'COUNT-DECREMENT-VALUE':
             return {
                 ...state,
-                count: state.count-1
+                count: state.count - 1
             }
-        }
-        case 'COUNT-RESET-VALUE': {
-            return {
-                ...state,
-                count: state.minValueCount.valueCount
-            }
-        }
-        case 'SET-COUNT-NEW-VALUE': {
+        case 'RESET-COUNTER':
+        case 'SET-COUNT-NEW-VALUE':
             return {
                 ...state,
                 count: state.minValueCount.valueCount,
             }
-        }
-        case 'SET-ERROR': {
+        case 'SET-ERROR':
             return {
                 ...state,
                 error: action.error
             }
-        }
         default:
             return state
     }
@@ -78,7 +68,7 @@ export const setCountDecrementValue = () => {
     return {type: 'COUNT-DECREMENT-VALUE'} as const
 }
 export const setCountResetValue = () => {
-    return {type: 'COUNT-RESET-VALUE'} as const
+    return {type: 'RESET-COUNTER'} as const
 }
 export const setCountNewValue = () => {
     return {type: 'SET-COUNT-NEW-VALUE'} as const

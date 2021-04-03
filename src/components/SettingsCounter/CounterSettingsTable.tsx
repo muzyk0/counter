@@ -52,9 +52,7 @@ export const CounterSettingsTable: React.FC<CounterTableProps> = (props) => {
     }
     const setNewMinSettings = (e: ChangeEvent<HTMLInputElement>) => {
         const num = e.currentTarget.valueAsNumber
-
         setNewSettings('minValueCount', num)
-        // dispatch(setCounterNewSettingAC('minValueCount', num))
     }
 
     const errorStyle = `${s.input} ${props.error === 'Incorrect value!' && s.errorInput}`

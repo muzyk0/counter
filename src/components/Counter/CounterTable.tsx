@@ -1,19 +1,17 @@
 import React from 'react';
 import s from './Counter.module.css';
-import {ErrorType, SettingsCounterType} from '../../redux/settings-counter-reducer';
+import {SettingsCounterType} from '../../redux/settings-counter-reducer';
 
 export type CounterTableProps = {
-    count: number
     settingsCounter: SettingsCounterType
-    error: ErrorType
 }
-export const CounterTable: React.FC<CounterTableProps> = ({settingsCounter, ...props}) => {
+export const CounterTable: React.FC<CounterTableProps> = ({settingsCounter}) => {
 
-    const colorCount = props.count>= settingsCounter.maxValueCount.valueCount ? s.error : ''
-    const errorStyle = props.error === 'Incorrect value!' ? s.error : ''
+    const colorCount = settingsCounter.count>= settingsCounter.maxValueCount.valueCount ? s.error : ''
+    const errorStyle = settingsCounter.error === 'Incorrect value!' ? s.error : ''
     return (
-        <div className={s.counter}>
-            {props.error ? <p className={errorStyle}>{props.error}</p> : <h1 className={colorCount}>{props.count}</h1>}
-        </div>
+        <>
+            {settingsCounter.error ? <p className={errorStyle}>{settingsCounter.error}</p> : <h1 className={colorCount}>{settingsCounter.count}</h1>}
+        </>
     )
 }
