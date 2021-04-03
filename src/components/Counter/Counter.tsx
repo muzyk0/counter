@@ -1,22 +1,24 @@
 import React from 'react';
-import {ErrorType, SettingsCounterType} from '../../App';
 import s from './Counter.module.css';
 import {Button} from '../Button/Button';
 import {CounterTable} from './CounterTable';
+import {useDispatch} from 'react-redux';
+import {
+    ErrorType,
+    setCountDecrementValue,
+    setCountIncValue,
+    setCountResetValue,
+    SettingsCounterType
+} from '../../redux/settings-counter-reducer';
 
 export type CounterButtonsProps = {
     count: number
-    setCountIncValue: () => void
-    resetCountValue: () => void
     settingsCounter: SettingsCounterType
-    slowResetCount: (count: number) => void
+    error: ErrorType
 }
 
 export type CounterPropsType = {
     count: number
-    setCountIncValue: () => void
-    resetCountValue: () => void
-    slowResetCount: (count: number) => void
     settingsCounter: SettingsCounterType
     error: ErrorType
 }
@@ -28,13 +30,11 @@ export const Counter: React.FC<CounterPropsType> = ({settingsCounter, ...props})
                 count={props.count}
                 settingsCounter={settingsCounter}
                 error={props.error}
-                slowResetCount={props.slowResetCount}
             />
-            <CounterBtn count={props.count}
-                        setCountIncValue={props.setCountIncValue}
-                        resetCountValue={props.resetCountValue}
-                        settingsCounter={settingsCounter}
-                        slowResetCount={props.slowResetCount}
+            <CounterBtn
+                count={props.count}
+                error={props.error}
+                settingsCounter={settingsCounter}
             />
         </div>
     )
@@ -42,32 +42,45 @@ export const Counter: React.FC<CounterPropsType> = ({settingsCounter, ...props})
 
 const CounterBtn: React.FC<CounterButtonsProps> = ({settingsCounter, ...props}) => {
 
+    const dispatch = useDispatch()
+
     const countInc = () => {
-        props.setCountIncValue()
+        dispatch(setCountIncValue())
+    }
+    const countDecrement = () => {
+        dispatch(setCountDecrementValue())
     }
     const countReset = () => {
-        props.resetCountValue()
+        dispatch(setCountResetValue())
     }
-    const slowlyReset = () => {
-        props.slowResetCount(props.count)
+
+    const slowResetCount = (count: number) => {
+        const interval = setInterval(() => {
+            if (count) {
+                // setCount(--count)
+            }
+            if (count <= settingsCounter.minValueCount.valueCount) {
+                clearInterval(interval)
+            }
+        }, 100)
     }
 
     return (
         <div className={s.buttons}>
             <Button
                 title={'inc'}
-                disabled={props.count >= settingsCounter.maxValueCount.valueCount}
+                disabled={!!props.error && props.count >= settingsCounter.maxValueCount.valueCount}
                 onClickHandler={countInc}
+            />
+            <Button
+                title={'dec'}
+                disabled={props.count <= settingsCounter.minValueCount.valueCount}
+                onClickHandler={countDecrement}
             />
             <Button
                 title={'reset'}
                 disabled={props.count <= settingsCounter.minValueCount.valueCount}
                 onClickHandler={countReset}
-            />
-            <Button
-                title={'slowly reset'}
-                disabled={props.count <= settingsCounter.minValueCount.valueCount}
-                onClickHandler={slowlyReset}
             />
         </div>
     )

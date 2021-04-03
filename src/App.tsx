@@ -1,56 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Counter} from './components/Counter/Counter';
 import {CounterSettings} from './components/SettingsCounter/CounterSettings';
 import s from './App.module.css';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {AppStateType} from './redux/store';
-
-
-export type SettingsType = {
-    title: string
-    valueCount: number
-}
-export type SettingsCounterType = {
-    maxValueCount: SettingsType
-    minValueCount: SettingsType
-}
-
-const InitialState = {
-    count: 0,
-    maxValueCount: {title: 'max value', valueCount: 5},
-    minValueCount: {title: 'min value', valueCount: 0}
-}
-
-export type ErrorType = `enter values and press 'set'` | `Incorrect value!` | ``
+import {ErrorType, setErrorAC, SettingsCounterType} from './redux/settings-counter-reducer';
 
 export function App() {
 
-    const [count, setCount] = useState<number>(0);
-    const [error, setError] = useState<ErrorType>(``)
 
-    // const settingsCounter = useSelector<AppStateType, SettingsCounterType>(state => state.settingsCounter)
-
-    const [settingsCounter, setSettingsCounter] = useState<SettingsCounterType>({
-        maxValueCount: {title: 'max value', valueCount: 5},
-        minValueCount: {title: 'min value', valueCount: 0}
-    })
-
-    const setNewSettings = (id: 'maxValueCount' | 'minValueCount', value: number) => {
-        setError(`enter values and press 'set'`)
-        return setSettingsCounter({
-            ...settingsCounter,
-            [id]: {...settingsCounter[id], valueCount: value}
-        })
-    }
-
-
-    const setNewValue = () => {
-        const newValue = settingsCounter.minValueCount
-        if (newValue) {
-            setCount(newValue.valueCount)
-            setError(``)
-        }
-    }
+    const settingsCounter = useSelector<AppStateType, SettingsCounterType>(state => state.settingsCounter)
 
     /*    useEffect(() => {
             const maxValueCount = localStorage.getItem('maxValueCount')
@@ -70,43 +29,22 @@ export function App() {
             localStorage.setItem('minValueCount', JSON.stringify(settingsCounter.minValueCount))
         }, [settingsCounter])*/
 
+    const dispatch = useDispatch()
 
-    const setCountIncValue = () => {
-        setCount(count + 1)
+    const setError = (value: ErrorType) => {
+        dispatch(setErrorAC(value))
     }
-    const resetCountValue = () => {
-        setCount(settingsCounter.minValueCount.valueCount)
-    }
-
-    // set interval
-    // not using now
-    const slowResetCount = (count: number) => {
-        const interval = setInterval(() => {
-            if (count) {
-                setCount(--count)
-            }
-            if (count <= settingsCounter.minValueCount.valueCount) {
-                clearInterval(interval)
-            }
-        }, 100)
-    }
-
 
     return (
         <div className={s.App}>
             <CounterSettings
-                setNewSettings={setNewSettings}
                 settingsCounter={settingsCounter}
-                setNewValue={setNewValue}
-                error={error}
+                error={settingsCounter.error}
                 setError={setError}
             />
             <Counter
-                count={count}
-                error={error}
-                setCountIncValue={setCountIncValue}
-                resetCountValue={resetCountValue}
-                slowResetCount={slowResetCount}
+                count={settingsCounter.count}
+                error={settingsCounter.error}
                 settingsCounter={settingsCounter}
             />
         </div>

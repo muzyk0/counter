@@ -3,7 +3,8 @@ import s from './CounterSettings.module.css';
 import {Button} from '../Button/Button';
 
 import {CounterSettingsTable} from './CounterSettingsTable';
-import {ErrorType, SettingsCounterType} from '../../App';
+import {useDispatch} from 'react-redux';
+import {ErrorType, setCountNewValue, setErrorAC, SettingsCounterType} from '../../redux/settings-counter-reducer';
 
 export type ButtonType = {
     disabled: boolean
@@ -11,30 +12,28 @@ export type ButtonType = {
     title: string
 }
 export type CounterButtonsProps = {
-    setNewValue: () => void
     error: ErrorType
+    setError: (value: ErrorType) => void
 }
 
 export type CounterSettingPropsType = {
-    setNewSettings: (id: 'maxValueCount' | 'minValueCount', value: number) => void
     settingsCounter: SettingsCounterType
-    setNewValue: () => void
     error: ErrorType
     setError: (value: ErrorType) => void
 }
 
 export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
 
+
     return (
         <div className={s.CounterWrapper}>
             <CounterSettingsTable
-                setNewSettings={props.setNewSettings}
                 settingsCounter={props.settingsCounter}
                 setError={props.setError}
                 error={props.error}
             />
             <CounterSettingBtn
-                setNewValue={props.setNewValue}
+                setError={props.setError}
                 error={props.error}
             />
         </div>
@@ -43,12 +42,13 @@ export const CounterSettings: React.FC<CounterSettingPropsType> = (props) => {
 
 const CounterSettingBtn: React.FC<CounterButtonsProps> = (props) => {
 
-    const disabledBtn = props.error === 'Incorrect value!'
+    const dispatch = useDispatch()
 
     const countSet = () => {
-        props.setNewValue()
+        dispatch(setErrorAC(''))
+        dispatch(setCountNewValue())
     }
-
+    const disabledBtn = props.error === 'Incorrect value!'
     return (
         <div className={s.buttons}>
             <Button disabled={disabledBtn} onClickHandler={countSet} title={'set'}/>

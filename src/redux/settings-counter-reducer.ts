@@ -2,17 +2,20 @@ export type SettingsType = {
     title: string
     valueCount: number
 }
+export type ErrorType = `enter values and press 'set'` | `Incorrect value!` | ``
 export type SettingsCounterType = {
     count: number
+    error: ErrorType
     maxValueCount: SettingsType
     minValueCount: SettingsType
 }
 
 const InitialState = {
     count: 0,
+    error: `enter values and press 'set'`,
     maxValueCount: {title: 'max value', valueCount: 5},
     minValueCount: {title: 'min value', valueCount: 0}
-}
+} as const
 
 
 export const settingsCounterReducer = (state: SettingsCounterType = InitialState, action: CounterReducerActionType): SettingsCounterType => {
@@ -20,19 +23,37 @@ export const settingsCounterReducer = (state: SettingsCounterType = InitialState
         case 'SET-NEW-SETTINGS': {
             return {
                 ...state,
-                [action.id]: {...state[action.id], valueCount: action.valueCount}
+                [action.id]: {...state[action.id], valueCount: action.valueCount},
             }
         }
-        case 'SET-COUNT-INC-VALUE': {
+        case 'COUNT-INC-VALUE': {
             return {
                 ...state,
                 count: state.count+1
             }
         }
-        case 'SET-COUNT-RESET-VALUE': {
+        case 'COUNT-DECREMENT-VALUE': {
+            return {
+                ...state,
+                count: state.count-1
+            }
+        }
+        case 'COUNT-RESET-VALUE': {
             return {
                 ...state,
                 count: state.minValueCount.valueCount
+            }
+        }
+        case 'SET-COUNT-NEW-VALUE': {
+            return {
+                ...state,
+                count: state.minValueCount.valueCount,
+            }
+        }
+        case 'SET-ERROR': {
+            return {
+                ...state,
+                error: action.error
             }
         }
         default:
@@ -40,16 +61,28 @@ export const settingsCounterReducer = (state: SettingsCounterType = InitialState
     }
 }
 
-export type CounterReducerActionType = ReturnType<typeof setCounterNewSetting>
+export type CounterReducerActionType = ReturnType<typeof setCounterNewSettingAC>
     | ReturnType<typeof setCountIncValue>
+    | ReturnType<typeof setCountDecrementValue>
     | ReturnType<typeof setCountResetValue>
+    | ReturnType<typeof setCountNewValue>
+    | ReturnType<typeof setErrorAC>
 
-export const setCounterNewSetting = (id: 'maxValueCount' | 'minValueCount', value: number) => {
+export const setCounterNewSettingAC = (id: 'maxValueCount' | 'minValueCount', value: number) => {
     return {type: 'SET-NEW-SETTINGS', id, valueCount: value} as const
 }
 export const setCountIncValue = () => {
-    return {type: 'SET-COUNT-INC-VALUE'} as const
+    return {type: 'COUNT-INC-VALUE'} as const
+}
+export const setCountDecrementValue = () => {
+    return {type: 'COUNT-DECREMENT-VALUE'} as const
 }
 export const setCountResetValue = () => {
-    return {type: 'SET-COUNT-RESET-VALUE'} as const
+    return {type: 'COUNT-RESET-VALUE'} as const
+}
+export const setCountNewValue = () => {
+    return {type: 'SET-COUNT-NEW-VALUE'} as const
+}
+export const setErrorAC = (error: ErrorType) => {
+    return {type: 'SET-ERROR', error} as const
 }

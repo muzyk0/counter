@@ -1,40 +1,63 @@
-import {setCounterNewSetting} from '../../redux/settings-counter-reducer';
-import {ErrorType, SettingsCounterType} from '../../App';
 import React, {ChangeEvent} from 'react';
 import s from './CounterSettings.module.css';
+import {ErrorType, setCounterNewSettingAC, SettingsCounterType} from '../../redux/settings-counter-reducer';
 import {useDispatch} from 'react-redux';
 
 export type CounterTableProps = {
-    setNewSettings: (id: 'maxValueCount' | 'minValueCount', value: number) => void
     settingsCounter: SettingsCounterType
-    setError: (value: ErrorType) => void
     error: ErrorType
+    setError: (value: ErrorType) => void
 }
 export const CounterSettingsTable: React.FC<CounterTableProps> = (props) => {
+    // if (props.settingsCounter.minValueCount.valueCount < 0) {
+    //     props.setError(`Incorrect value!`)
+    // } else if (props.settingsCounter.minValueCount.valueCount >= props.settingsCounter.maxValueCount.valueCount) {
+    //     props.setError(`Incorrect value!`)
+    // }
+
 
     const dispatch = useDispatch()
 
-    if (props.settingsCounter.minValueCount) {
-        if (props.settingsCounter.minValueCount.valueCount < 0) {
-            props.setError(`Incorrect value!`)
-        } else if (props.settingsCounter.minValueCount.valueCount >= props.settingsCounter.maxValueCount.valueCount) {
-            props.setError(`Incorrect value!`)
+    const setNewSettings = (id: 'maxValueCount' | 'minValueCount', value: number) => {
+        switch (id) {
+            case 'minValueCount': {
+                if (value < 0) {
+                    props.setError(`Incorrect value!`)
+                } else if (value >= props.settingsCounter.maxValueCount.valueCount) {
+                    props.setError(`Incorrect value!`)
+                } else {
+                    props.setError(`enter values and press 'set'`)
+                }
+                break
+            }
+            case 'maxValueCount': {
+                if (value < 0) { // не нужно
+                    props.setError(`Incorrect value!`)
+                } else if (value <= props.settingsCounter.minValueCount.valueCount) {
+                    props.setError(`Incorrect value!`)
+                } else {
+                    props.setError(`enter values and press 'set'`)
+                }
+                break
+            }
+            default:
+                props.setError(`enter values and press 'set'`)
         }
+        dispatch(setCounterNewSettingAC(id, value))
     }
-
 
     const setNewMaxSettings = (e: ChangeEvent<HTMLInputElement>) => {
         const num = e.currentTarget.valueAsNumber
-        props.setNewSettings('maxValueCount', num)
-        dispatch(setCounterNewSetting('maxValueCount', num))
+        setNewSettings('maxValueCount', num)
     }
     const setNewMinSettings = (e: ChangeEvent<HTMLInputElement>) => {
         const num = e.currentTarget.valueAsNumber
-        props.setNewSettings('minValueCount', num)
-        dispatch(setCounterNewSetting('minValueCount', num))
+
+        setNewSettings('minValueCount', num)
+        // dispatch(setCounterNewSettingAC('minValueCount', num))
     }
 
-    const errorStyle = `${s.input} ${props.error === 'Incorrect value!' ? s.errorInput : ''}`
+    const errorStyle = `${s.input} ${props.error === 'Incorrect value!' && s.errorInput}`
 
     return (
         <div className={s.counter}>
