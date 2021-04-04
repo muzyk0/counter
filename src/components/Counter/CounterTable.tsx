@@ -1,6 +1,6 @@
 import React from 'react';
 import s from './Counter.module.css';
-import {SettingsCounterType} from '../../redux/settings-counter-reducer';
+import {SettingsCounterType} from '../../redux/counter-reducer';
 
 export type CounterTableProps = {
     settingsCounter: SettingsCounterType

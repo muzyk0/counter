@@ -1,71 +1,49 @@
-import React from 'react';
-import {Button} from '../Button/Button';
+import React, {ChangeEvent} from 'react';
+import styles from './CounterSettings.module.css';
+import {SettingsCounterType} from '../../redux/counter-reducer';
 
-import {CounterSettingsTable} from './CounterSettingsTable';
-import {useDispatch} from 'react-redux';
-import {ErrorType, setCountNewValue, setErrorAC, SettingsCounterType} from '../../redux/settings-counter-reducer';
-import {Btn, CounterWrapper, Table} from '../CounterWrapper';
-
-export type ButtonType = {
-    disabled: boolean
-    onClickHandler: () => void
-    title: string
-}
-export type CounterSettingPropsType = {
+type PropsType = {
     settingsCounter: SettingsCounterType
-    setError: (value: ErrorType) => void
+    setNewSettings: (id: 'maxValueCount' | 'minValueCount', value: number) => void
 }
+export const CounterSettings: React.FC<PropsType> = (props) => {
 
-export type CounterButtonsProps = {
-    error: ErrorType
-    setError: (value: ErrorType) => void
-}
+    const {
+        settingsCounter,
+        setNewSettings
+    } = props
 
-export const CounterSettings: React.FC<CounterSettingPropsType> = ({settingsCounter, ...props}) => {
-
-
-    return (
-        /*<div className={s.CounterWrapper}>
-            <CounterSettingsTable
-                settingsCounter={settingsCounter}
-                setError={props.setError}
-                error={settingsCounter.error}
-            />
-            <CounterSettingBtn
-                setError={props.setError}
-                error={settingsCounter.error}
-            />
-        </div>*/
-    <CounterWrapper>
-        <Table>
-            <CounterSettingsTable
-                settingsCounter={settingsCounter}
-                setError={props.setError}
-                error={settingsCounter.error}
-            />
-        </Table>
-        <Btn>
-            <CounterSettingBtn
-                setError={props.setError}
-                error={settingsCounter.error}
-            />
-        </Btn>
-    </CounterWrapper>
-    )
-}
-
-const CounterSettingBtn: React.FC<CounterButtonsProps> = (props) => {
-
-    const dispatch = useDispatch()
-
-    const countSet = () => {
-        dispatch(setErrorAC(''))
-        dispatch(setCountNewValue())
+    const setNewMaxSettings = (e: ChangeEvent<HTMLInputElement>) => {
+        const num = e.currentTarget.valueAsNumber
+        setNewSettings('maxValueCount', num)
     }
-    const disabledBtn = props.error === 'Incorrect value!'
+    const setNewMinSettings = (e: ChangeEvent<HTMLInputElement>) => {
+        const num = e.currentTarget.valueAsNumber
+        setNewSettings('minValueCount', num)
+    }
+
+    const errorStyle = `${styles.input} ${settingsCounter.error === 'Incorrect value!' && styles.errorInput}`
+
     return (
-        <>
-            <Button disabled={disabledBtn} onClickHandler={countSet} title={'set'}/>
-        </>
+        <React.Fragment>
+            <div className={styles.valueSettingWrapper}>
+                <label>{settingsCounter.maxValueCount.title}</label>
+                <input
+                    type="number"
+                    className={errorStyle}
+                    value={settingsCounter.maxValueCount.valueCount}
+                    onChange={setNewMaxSettings}
+                />
+            </div>
+            <div className={styles.valueSettingWrapper}>
+                <label>{settingsCounter.minValueCount.title}</label>
+                <input
+                    type="number"
+                    className={errorStyle}
+                    value={settingsCounter.minValueCount.valueCount}
+                    onChange={setNewMinSettings}
+                />
+            </div>
+        </React.Fragment>
     )
 }

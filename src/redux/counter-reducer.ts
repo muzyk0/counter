@@ -18,7 +18,7 @@ const InitialState = {
 } as const
 
 
-export const settingsCounterReducer = (state: SettingsCounterType = InitialState, action: CounterReducerActionType): SettingsCounterType => {
+export const counterReducer = (state: SettingsCounterType = InitialState, action: CounterReducerActionType): SettingsCounterType => {
     switch (action.type) {
         case 'SET-NEW-SETTINGS':
             return {
