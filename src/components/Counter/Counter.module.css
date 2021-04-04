@@ -1,34 +1,3 @@
-.CounterWrapper {
-  text-align: center;
-  margin: 20px auto;
-  width: 200px;
-  border: 1px solid aqua;
-  border-radius: 5px;
-  color: aqua;
-}
-
-.counter {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: column;
-  align-items: center;
-  padding: 5px;
-  height: 80px;
-  background-color: transparent;
-  border: 2px solid aqua;
-  border-radius: 5px;
-  margin: 5px;
-}
-
-.counter .error {
+.error {
   color: red;
-}
-
-.buttons {
-  margin: 5px;
-  padding: 5px;
-  border: 1px solid aqua;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-around;
 }

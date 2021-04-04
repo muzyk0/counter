@@ -1,10 +1,10 @@
 import React from 'react';
-import s from './CounterSettings.module.css';
 import {Button} from '../Button/Button';
 
 import {CounterSettingsTable} from './CounterSettingsTable';
 import {useDispatch} from 'react-redux';
 import {ErrorType, setCountNewValue, setErrorAC, SettingsCounterType} from '../../redux/settings-counter-reducer';
+import {Btn, CounterWrapper, Table} from '../CounterWrapper';
 
 export type ButtonType = {
     disabled: boolean
@@ -25,7 +25,7 @@ export const CounterSettings: React.FC<CounterSettingPropsType> = ({settingsCoun
 
 
     return (
-        <div className={s.CounterWrapper}>
+        /*<div className={s.CounterWrapper}>
             <CounterSettingsTable
                 settingsCounter={settingsCounter}
                 setError={props.setError}
@@ -35,7 +35,22 @@ export const CounterSettings: React.FC<CounterSettingPropsType> = ({settingsCoun
                 setError={props.setError}
                 error={settingsCounter.error}
             />
-        </div>
+        </div>*/
+    <CounterWrapper>
+        <Table>
+            <CounterSettingsTable
+                settingsCounter={settingsCounter}
+                setError={props.setError}
+                error={settingsCounter.error}
+            />
+        </Table>
+        <Btn>
+            <CounterSettingBtn
+                setError={props.setError}
+                error={settingsCounter.error}
+            />
+        </Btn>
+    </CounterWrapper>
     )
 }
 
@@ -49,8 +64,8 @@ const CounterSettingBtn: React.FC<CounterButtonsProps> = (props) => {
     }
     const disabledBtn = props.error === 'Incorrect value!'
     return (
-        <div className={s.buttons}>
+        <>
             <Button disabled={disabledBtn} onClickHandler={countSet} title={'set'}/>
-        </div>
+        </>
     )
 }

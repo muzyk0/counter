@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from 'react';
-import s from './CounterSettings.module.css';
+import styles from './CounterSettings.module.css';
 import {ErrorType, setCounterNewSettingAC, SettingsCounterType} from '../../redux/settings-counter-reducer';
 import {useDispatch} from 'react-redux';
 
@@ -55,11 +55,11 @@ export const CounterSettingsTable: React.FC<CounterTableProps> = (props) => {
         setNewSettings('minValueCount', num)
     }
 
-    const errorStyle = `${s.input} ${props.error === 'Incorrect value!' && s.errorInput}`
+    const errorStyle = `${styles.input} ${props.error === 'Incorrect value!' && styles.errorInput}`
 
     return (
-        <div className={s.counter}>
-            <div className={s.valueSettingWrapper}>
+        <>
+            <div className={styles.valueSettingWrapper}>
                 <label>{props.settingsCounter.maxValueCount.title}</label>
                 <input
                     type="number"
@@ -68,7 +68,7 @@ export const CounterSettingsTable: React.FC<CounterTableProps> = (props) => {
                     onChange={setNewMaxSettings}
                 />
             </div>
-            <div className={s.valueSettingWrapper}>
+            <div className={styles.valueSettingWrapper}>
                 <label>{props.settingsCounter.minValueCount.title}</label>
                 <input
                     type="number"
@@ -77,6 +77,6 @@ export const CounterSettingsTable: React.FC<CounterTableProps> = (props) => {
                     onChange={setNewMinSettings}
                 />
             </div>
-        </div>
+        </>
     )
 }

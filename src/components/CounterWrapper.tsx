@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './Counter/Counter.module.css';
+import s from './CounterWrapper.module.css';
 
 
 export const CounterWrapper: React.FC = (props) => {
