@@ -6,7 +6,7 @@ type PropsType = {
     count: number
     maxValueCount: number
 }
-export const Counter: React.FC<PropsType> = (props) => {
+export const Counter: React.FC<PropsType> = React.memo((props) => {
     const {
         error,
         count,
@@ -24,4 +24,4 @@ export const Counter: React.FC<PropsType> = (props) => {
             }
         </React.Fragment>
     )
-}
+})

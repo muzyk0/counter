@@ -6,7 +6,7 @@ export type CounterButtonsProps = {
     error: ErrorType
     countSet: () => void
 }
-export const CounterSettingBtn: React.FC<CounterButtonsProps> = (props) => {
+export const CounterSettingBtn: React.FC<CounterButtonsProps> = React.memo((props) => {
 
     const {
         error,
@@ -19,4 +19,4 @@ export const CounterSettingBtn: React.FC<CounterButtonsProps> = (props) => {
             <Button disabled={disabledBtn} onClickHandler={countSet} title={'set'}/>
         </>
     )
-}
+})

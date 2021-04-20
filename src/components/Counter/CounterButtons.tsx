@@ -9,7 +9,7 @@ type PropsType = {
     countReset: () => void
 }
 
-    export const ButtonsCounter: React.FC<PropsType> = (props) => {
+    export const ButtonsCounter: React.FC<PropsType> = React.memo((props) => {
     const {
     settingsCounter,
     countInc,
@@ -37,4 +37,4 @@ return (
         />
     </React.Fragment>
 )
-}
+})

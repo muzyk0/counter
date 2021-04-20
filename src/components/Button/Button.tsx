@@ -6,8 +6,8 @@ export type ButtonType = {
     onClickHandler: () => void
     title: string
 }
-export const Button = (props: ButtonType) => {
+export const Button = React.memo((props: ButtonType) => {
     return <button disabled={props.disabled}
                    className={`${s.btn}`}
                    onClick={props.onClickHandler}>{props.title}</button>
-}
+})

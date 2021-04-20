@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
     setCountDecrementValue,
@@ -12,20 +12,20 @@ import {ButtonsCounter} from './CounterButtons';
 import {AppStateType} from '../../redux/store';
 
 
-export const CounterContainer: React.FC = () => {
+export const CounterContainer: React.FC = React.memo(() => {
 
     const settingsCounter = useSelector<AppStateType, SettingsCounterType>(state => state.settingsCounter)
     const dispatch = useDispatch()
 
-    const countInc = () => {
+    const countInc = useCallback(() => {
         dispatch(setCountIncValue())
-    }
-    const countDecrement = () => {
+    }, [dispatch])
+    const countDecrement = useCallback(() => {
         dispatch(setCountDecrementValue())
-    }
-    const countReset = () => {
+    }, [dispatch])
+    const countReset = useCallback(() => {
         dispatch(setCountResetValue())
-    }
+    }, [dispatch])
     return (
         <CounterWrapper>
             <Table>
@@ -45,4 +45,5 @@ export const CounterContainer: React.FC = () => {
             </Btn>
         </CounterWrapper>
     )
-}
+})
+
